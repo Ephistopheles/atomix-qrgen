@@ -1,11 +1,49 @@
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
+@import "tailwindcss";
 
-* {
-  box-sizing: border-box;
+@layer base {
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        font-family: "Rubik", system-ui, sans-serif;
+    }
+
+    @font-face {
+        font-family: 'Rubik';
+        src: url('/fonts/Rubik/Rubik-Regular.woff2') format('woff2');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Rubik';
+        src: url('/fonts/Rubik/Rubik-Medium.woff2') format('woff2');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Rubik';
+        src: url('/fonts/Rubik/Rubik-SemiBold.woff2') format('woff2');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Rubik';
+        src: url('/fonts/Rubik/Rubik-Bold.woff2') format('woff2');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
 }
