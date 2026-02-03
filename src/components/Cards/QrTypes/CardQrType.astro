@@ -1,61 +1,42 @@
 ---
-// todo: make this dynamic later
+import TextIcon from "../../../assets/icons/text.svg";
+import LinkIcon from "../../../assets/icons/link.svg";
+import WifiIcon from "../../../assets/icons/wifi.svg";
+import ContactIcon from "../../../assets/icons/contact.svg";
+import BankIcon from "../../../assets/icons/bank.svg";
+import CalendarIcon from "../../../assets/icons/calendar.svg";
+
+interface qrType {
+  icon: any;
+  label: string;
+}
+
+const qrTypes: qrType[] = [
+  { icon: TextIcon, label: "Texto plano" },
+  { icon: LinkIcon, label: "URL / Link" },
+  { icon: WifiIcon, label: "Wi-Fi" },
+  { icon: ContactIcon, label: "vCard / Contacto" },
+  { icon: BankIcon, label: "Pago / Banco" },
+  { icon: CalendarIcon, label: "Evento / Calendar" },
+];
 ---
 
 <section class="space-y-6">
-    <article
-        class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition h-fit"
-    >
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Tipos de QR</h2>
-        <ul class="space-y-2">
-            <li>
-                <button
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-100 transition"
-                >
-                    <span class="text-lg">📝</span>
-                    <span class="text-sm font-medium">Texto plano</span>
-                </button>
-            </li>
-            <li>
-                <button
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-600 text-white transition"
-                >
-                    <span class="text-lg">🔗</span>
-                    <span class="text-sm font-medium">URL / Link</span>
-                </button>
-            </li>
-            <li>
-                <button
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-100 transition"
-                >
-                    <span class="text-lg">📡</span>
-                    <span class="text-sm font-medium">Wi-Fi</span>
-                </button>
-            </li>
-            <li>
-                <button
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-100 transition"
-                >
-                    <span class="text-lg">👤</span>
-                    <span class="text-sm font-medium">vCard / Contacto</span>
-                </button>
-            </li>
-            <li>
-                <button
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-100 transition"
-                >
-                    <span class="text-lg">💳</span>
-                    <span class="text-sm font-medium">Pago / Banco</span>
-                </button>
-            </li>
-            <li>
-                <button
-                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-100 transition"
-                >
-                    <span class="text-lg">📅</span>
-                    <span class="text-sm font-medium">Evento / Calendar</span>
-                </button>
-            </li>
-        </ul>
-    </article>
+  <article
+    class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition h-fit"
+  >
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Tipos de QR</h2>
+    <ul class="space-y-2">
+      {
+        qrTypes.map((type) => (
+          <li>
+            <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-100 transition">
+              <type.icon is:component class="w-5 h-5" />
+              <span class="text-sm font-medium">{type.label}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </article>
 </section>

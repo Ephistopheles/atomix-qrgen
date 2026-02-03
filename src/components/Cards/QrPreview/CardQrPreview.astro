@@ -1,73 +1,71 @@
 <section class="space-y-6">
-    <article
-        class="bg-white rounded-xl border border-gray-200 p-8 shadow-sm sticky"
-    >
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Vista previa</h2>
-        <div class="space-y-6">
-            <!-- Format Selector -->
-            <div
-                class="flex gap-px bg-gray-200 p-px rounded-lg overflow-hidden"
-            >
-                <button
-                    class="flex-1 py-2 bg-blue-600 text-white text-xs font-semibold rounded transition"
-                    aria-pressed="true"
-                >
-                    PNG
-                </button>
-                <button
-                    class="flex-1 py-2 bg-white text-gray-700 text-xs font-semibold rounded transition hover:bg-gray-50"
-                    aria-pressed="false"
-                >
-                    SVG
-                </button>
-                <button
-                    class="flex-1 py-2 bg-white text-gray-700 text-xs font-semibold rounded transition hover:bg-gray-50"
-                    aria-pressed="false"
-                >
-                    PDF
-                </button>
-            </div>
+  <article
+    class="bg-white rounded-xl border border-gray-200 p-8 shadow-sm sticky"
+  >
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Vista previa</h2>
+    <div class="space-y-6">
+      <!-- Format Selector -->
+      <div class="flex gap-px bg-gray-200 p-px rounded-lg overflow-hidden">
+        <button
+          class="flex-1 py-2 bg-blue-600 text-white text-xs font-semibold rounded transition"
+          aria-pressed="true"
+        >
+          PNG
+        </button>
+        <button
+          class="flex-1 py-2 bg-white text-gray-700 text-xs font-semibold rounded transition hover:bg-gray-50"
+          aria-pressed="false"
+        >
+          SVG
+        </button>
+        <button
+          class="flex-1 py-2 bg-white text-gray-700 text-xs font-semibold rounded transition hover:bg-gray-50"
+          aria-pressed="false"
+        >
+          PDF
+        </button>
+      </div>
 
-            <!-- QR Preview -->
-            <div class="flex justify-center">
-                <div
-                    class="w-56 h-56 bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg border border-gray-300 flex items-center justify-center overflow-hidden"
-                >
-                    <img
-                        src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://www.ejemplo.com"
-                        alt="Vista previa del código QR"
-                        class="w-full h-full object-contain p-2"
-                    />
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="space-y-3">
-                <button
-                    class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
-                >
-                    <span>⬇️</span>
-                    Descargar QR
-                </button>
-                <button
-                    class="w-full py-3 bg-blue-100 text-blue-600 font-semibold rounded-lg hover:bg-blue-200 transition flex items-center justify-center gap-2"
-                >
-                    <span>🖨️</span>
-                    Imprimir
-                </button>
-            </div>
-
-            <!-- Quality Info -->
-            <div class="border-t border-gray-200 pt-4 space-y-2 text-sm">
-                <div class="flex justify-between">
-                    <span class="text-gray-600">Calidad</span>
-                    <span class="font-medium text-gray-900">Alta (2000px)</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">Corrección</span>
-                    <span class="font-medium text-gray-900">Nivel M (15%)</span>
-                </div>
-            </div>
+      <!-- QR Preview -->
+      <div class="flex justify-center">
+        <div
+          class="w-56 h-56 bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg border border-gray-300 flex items-center justify-center overflow-hidden"
+        >
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://www.ejemplo.com"
+            alt="Vista previa del código QR"
+            class="w-full h-full object-contain p-2"
+          />
         </div>
-    </article>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-3">
+        <button
+          class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+        >
+          <span>⬇️</span>
+          Descargar QR
+        </button>
+        <button
+          class="w-full py-3 bg-blue-100 text-blue-600 font-semibold rounded-lg hover:bg-blue-200 transition flex items-center justify-center gap-2"
+        >
+          <span>🖨️</span>
+          Imprimir
+        </button>
+      </div>
+
+      <!-- Quality Info -->
+      <div class="border-t border-gray-200 pt-4 space-y-2 text-sm">
+        <div class="flex justify-between">
+          <span class="text-gray-600">Calidad</span>
+          <span class="font-medium text-gray-900">Alta (2000px)</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-600">Corrección</span>
+          <span class="font-medium text-gray-900">Nivel M (15%)</span>
+        </div>
+      </div>
+    </div>
+  </article>
 </section>

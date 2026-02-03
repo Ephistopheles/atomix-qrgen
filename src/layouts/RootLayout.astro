@@ -2,53 +2,38 @@
 import "../styles/global.css";
 
 const {
-	title = "QrGen | Atomix",
-	description = "Generate QR codes instantly with Atomix.",
+  title = "QrGen | Atomix",
+  description = "Generate QR codes instantly with Atomix.",
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" class="antialiased">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
 
-		<title>{title}</title>
-		<meta name="description" content={description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
 
-		<meta
-			name="keywords"
-			content="QR, QRCode generator, Atomix, generador de codigos QR, crear codigo QR, free QR code"
-		/>
-		<meta name="author" content="Johan Amed" />
+    <meta
+      name="keywords"
+      content="QR, QRCode generator, Atomix, generador de codigos QR, crear codigo QR, free QR code"
+    />
+    <meta name="author" content="Johan Amed" />
 
-		<link
-			rel="icon"
-			href="/favicon-16x16.png"
-			sizes="16x16"
-			type="image/png"
-		/>
-		<link
-			rel="icon"
-			href="/favicon-32x32.png"
-			sizes="32x32"
-			type="image/png"
-		/>
-		<link
-			rel="icon"
-			href="/favicon-64x64.png"
-			sizes="64x64"
-			type="image/png"
-		/>
-		<link
-			rel="icon"
-			href="/favicon-120x120.png"
-			sizes="120x120"
-			type="image/png"
-		/>
-	</head>
+    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-64x64.png" sizes="64x64" type="image/png" />
+    <link
+      rel="icon"
+      href="/favicon-120x120.png"
+      sizes="120x120"
+      type="image/png"
+    />
+  </head>
 
-	<body class="font-rubik bg-slate-900 text-white min-h-screen">
-		<slot />
-	</body>
+  <body class="font-rubik bg-slate-900 text-white min-h-screen">
+    <slot />
+  </body>
 </html>
