@@ -4,7 +4,7 @@ import WifiIcon from "../../../../assets/icons/wifi.svg";
 import ContactIcon from "../../../../assets/icons/contact.svg";
 import BankIcon from "../../../../assets/icons/bank.svg";
 import CalendarIcon from "../../../../assets/icons/calendar.svg";
-import { QrTypeKey } from "../../../../domain/qr/qr";
+import { QrTypeKey } from "../../../../domain/types/qr";
 
 interface QrType {
   icon: { src: string };
