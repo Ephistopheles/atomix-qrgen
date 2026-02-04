@@ -1,5 +1,5 @@
 ---
-import CardQrType from "../Cards/QrTypes/CardQrType.astro";
+import CardQrType from "../Cards/QrTypes/CardQrType.tsx";
 import CardContentInput from "../Cards/ContentInputCard/CardContentInput.astro";
 import CardQrPreview from "../Cards/QrPreview/CardQrPreview.astro";
 ---
@@ -9,7 +9,7 @@ import CardQrPreview from "../Cards/QrPreview/CardQrPreview.astro";
 >
   <div class="flex-1 overflow-y-auto bg-slate-50 p-8">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      <CardQrType />
+      <CardQrType client:load />
       <CardContentInput />
       <CardQrPreview />
     </div>
