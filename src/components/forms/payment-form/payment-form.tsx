@@ -1,4 +1,5 @@
-import { useFormData, getInputValue } from "../../../domain/hooks/use-form-data";
+import { getInputValue } from "../../../domain/hooks/use-form-data";
+import { useFormData } from "../../../domain/hooks/use-form-data";
 import { validatePaymentQr } from "../../../domain/validation/validators";
 import FormInput from "../shared/form-input";
 import type { PaymentQrData } from "../../../domain/types/qr";
@@ -8,7 +9,7 @@ interface PaymentFormProps {
 }
 
 export default function PaymentForm({ onChange }: PaymentFormProps) {
-  const { data, update, errors, setErrors } = useFormData<PaymentQrData>({
+  const { data, errors, handleBlur, handleUpdate, update } = useFormData<PaymentQrData>({
     initialData: {
       method: "",
       name: "",
@@ -18,19 +19,8 @@ export default function PaymentForm({ onChange }: PaymentFormProps) {
       reference: "",
     },
     onChange,
+    validate: validatePaymentQr,
   });
-
-  const handleBlur = () => {
-    const validation = validatePaymentQr(data);
-    setErrors(validation.errors);
-  };
-
-  const handleUpdate = (field: keyof PaymentQrData, value: any) => {
-    const newData = { ...data, [field]: value };
-    update(field, value);
-    const validation = validatePaymentQr(newData);
-    setErrors(validation.errors);
-  };
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
-import { useFormData, getInputValue } from "../../../domain/hooks/use-form-data";
+import { getInputValue } from "../../../domain/hooks/use-form-data";
+import { useFormData } from "../../../domain/hooks/use-form-data";
 import { validateWifiQr } from "../../../domain/validation/validators";
 import FormInput from "../shared/form-input";
 import type { WifiQrData } from "../../../domain/types/qr";
@@ -10,26 +11,15 @@ interface WifiFormProps {
 
 export default function WifiForm({ onChange }: WifiFormProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const { data, update, errors, setErrors } = useFormData<WifiQrData>({
+  const { data, errors, handleBlur, handleUpdate, update } = useFormData<WifiQrData>({
     initialData: {
       ssid: "",
       password: "",
       security: "WPA",
     },
     onChange,
+    validate: validateWifiQr,
   });
-
-  const handleBlur = () => {
-    const validation = validateWifiQr(data);
-    setErrors(validation.errors);
-  };
-
-  const handleUpdate = (field: keyof WifiQrData, value: any) => {
-    const newData = { ...data, [field]: value };
-    update(field, value);
-    const validation = validateWifiQr(newData);
-    setErrors(validation.errors);
-  };
 
   return (
     <>

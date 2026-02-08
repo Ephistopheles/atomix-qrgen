@@ -1,4 +1,5 @@
-import { useFormData, getInputValue } from "../../../domain/hooks/use-form-data";
+import { getInputValue } from "../../../domain/hooks/use-form-data";
+import { useFormData } from "../../../domain/hooks/use-form-data";
 import { validateEventQr } from "../../../domain/validation/validators";
 import FormInput from "../shared/form-input";
 import type { EventQrData } from "../../../domain/types/qr";
@@ -8,7 +9,7 @@ interface EventFormProps {
 }
 
 export default function EventForm({ onChange }: EventFormProps) {
-  const { data, update, errors, setErrors } = useFormData<EventQrData>({
+  const { data, errors, handleBlur, handleUpdate, update } = useFormData<EventQrData>({
     initialData: {
       title: "",
       description: "",
@@ -17,19 +18,8 @@ export default function EventForm({ onChange }: EventFormProps) {
       end: "",
     },
     onChange,
+    validate: validateEventQr,
   });
-
-  const handleBlur = () => {
-    const validation = validateEventQr(data);
-    setErrors(validation.errors);
-  };
-
-  const handleUpdate = (field: keyof EventQrData, value: string) => {
-    const newData = { ...data, [field]: value };
-    update(field, value);
-    const validation = validateEventQr(newData);
-    setErrors(validation.errors);
-  };
 
   return (
     <>

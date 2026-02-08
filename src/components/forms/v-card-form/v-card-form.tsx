@@ -1,4 +1,5 @@
-import { useFormData, getInputValue } from "../../../domain/hooks/use-form-data";
+import { getInputValue } from "../../../domain/hooks/use-form-data";
+import { useFormData } from "../../../domain/hooks/use-form-data";
 import { validateVCardQr } from "../../../domain/validation/validators";
 import FormInput from "../shared/form-input";
 import type { VCardQrData } from "../../../domain/types/qr";
@@ -8,7 +9,7 @@ interface VCardFormProps {
 }
 
 export default function VCardForm({ onChange }: VCardFormProps) {
-  const { data, update, errors, setErrors } = useFormData<VCardQrData>({
+  const { data, errors, handleBlur, handleUpdate, update } = useFormData<VCardQrData>({
     initialData: {
       firstName: "",
       lastName: "",
@@ -22,19 +23,8 @@ export default function VCardForm({ onChange }: VCardFormProps) {
       note: "",
     },
     onChange,
+    validate: validateVCardQr,
   });
-
-  const handleBlur = () => {
-    const validation = validateVCardQr(data);
-    setErrors(validation.errors);
-  };
-
-  const handleUpdate = (field: keyof VCardQrData, value: string) => {
-    const newData = { ...data, [field]: value };
-    update(field, value);
-    const validation = validateVCardQr(newData);
-    setErrors(validation.errors);
-  };
 
   return (
     <>

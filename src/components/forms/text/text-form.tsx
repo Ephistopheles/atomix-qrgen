@@ -1,4 +1,5 @@
-import { useFormData, getInputValue } from "../../../domain/hooks/use-form-data";
+import { getInputValue } from "../../../domain/hooks/use-form-data";
+import { useFormData } from "../../../domain/hooks/use-form-data";
 import { validateTextQr } from "../../../domain/validation/validators";
 import FormInput from "../shared/form-input";
 import type { TextQrData } from "../../../domain/types/qr";
@@ -8,21 +9,11 @@ interface TextFormProps {
 }
 
 export default function TextForm({ onChange }: TextFormProps) {
-  const { data, update, errors, setErrors } = useFormData<TextQrData>({
+  const { data, errors, handleBlur, handleUpdate } = useFormData<TextQrData>({
     initialData: { text: "" },
     onChange,
+    validate: validateTextQr,
   });
-
-  const handleBlur = () => {
-    const validation = validateTextQr(data);
-    setErrors(validation.errors);
-  };
-
-  const handleInput = (value: string) => {
-    update("text", value);
-    const validation = validateTextQr({ text: value });
-    setErrors(validation.errors);
-  };
 
   return (
     <>
@@ -31,7 +22,7 @@ export default function TextForm({ onChange }: TextFormProps) {
         type="text"
         placeholder="Texto a codificar"
         value={data.text}
-        onInput={(e) => handleInput(getInputValue(e))}
+        onInput={(e) => handleUpdate("text", getInputValue(e))}
         onBlur={handleBlur}
         required
         error={errors.text}
