@@ -23,25 +23,31 @@ const encodeUrl = (data: UrlQrData) => {
 };
 
 const encodeWifi = (data: WifiQrData) => {
-  return `WIFI:T:${data.security};S:${data.ssid};P:${data.password || ""};;`;
+  const password = data.security === "nopass" ? "" : data.password.trim();
+  return `WIFI:T:${data.security};S:${data.ssid.trim()};P:${password};;`;
 };
 
 const encodeVCard = (data: VCardQrData) => {
   const lines: string[] = ["BEGIN:VCARD", "VERSION:3.0"];
 
-  if (data.firstName || data.lastName) {
-    lines.push(`FN:${data.firstName} ${data.lastName}`.trim());
-    lines.push(`N:${data.lastName};${data.firstName}`);
-  }
+  const fullName = `${data.firstName.trim()} ${data.lastName.trim()}`.trim();
+  lines.push(`FN:${fullName}`);
+  lines.push(`N:${data.lastName.trim()};${data.firstName.trim()};;;`);
 
-  if (data.phone) lines.push(`TEL;TYPE=VOICE:${data.phone}`);
-  if (data.mobile) lines.push(`TEL;TYPE=CELL:${data.mobile}`);
-  if (data.email) lines.push(`EMAIL:${data.email}`);
-  if (data.organization) lines.push(`ORG:${data.organization}`);
-  if (data.title) lines.push(`TITLE:${data.title}`);
-  if (data.website) lines.push(`URL:${data.website}`);
-  if (data.address) lines.push(`ADR:;;${data.address}`);
-  if (data.note) lines.push(`NOTE:${data.note}`);
+  if (data.phone?.trim()) lines.push(`TEL;TYPE=VOICE:${data.phone.trim()}`);
+  if (data.mobile?.trim()) lines.push(`TEL;TYPE=CELL:${data.mobile.trim()}`);
+  if (data.email?.trim()) lines.push(`EMAIL:${data.email.trim()}`);
+  if (data.organization?.trim()) lines.push(`ORG:${data.organization.trim()}`);
+  if (data.title?.trim()) lines.push(`TITLE:${data.title.trim()}`);
+  if (data.website?.trim()) {
+    let website = data.website.trim();
+    if (!website.startsWith("http://") && !website.startsWith("https://")) {
+      website = "https://" + website;
+    }
+    lines.push(`URL:${website}`);
+  }
+  if (data.address?.trim()) lines.push(`ADR:;;${data.address.trim()};;;`);
+  if (data.note?.trim()) lines.push(`NOTE:${data.note.trim()}`);
 
   lines.push("END:VCARD");
 
@@ -50,18 +56,18 @@ const encodeVCard = (data: VCardQrData) => {
 
 const encodePayment = (data: PaymentQrData) => {
   if (data.method === "crypto") {
-    return `${data.account}?amount=${data.amount}`;
+    return `${data.account.trim()}?amount=${data.amount}`;
   }
 
   const parts: string[] = [
-    `account=${data.account}`,
-    `name=${data.name}`,
-    `bank=${data.bank}`,
+    `account=${data.account.trim()}`,
+    `name=${data.name.trim()}`,
+    `bank=${data.bank.trim()}`,
     `amount=${data.amount}`,
   ];
 
-  if (data.reference) {
-    parts.push(`reference=${data.reference}`);
+  if (data.reference?.trim()) {
+    parts.push(`reference=${data.reference.trim()}`);
   }
 
   return parts.join("&");
@@ -70,17 +76,20 @@ const encodePayment = (data: PaymentQrData) => {
 const encodeEvent = (data: EventQrData) => {
   const lines: string[] = ["BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT"];
 
-  if (data.title) lines.push(`SUMMARY:${data.title}`);
-  if (data.description) lines.push(`DESCRIPTION:${data.description}`);
-  if (data.location) lines.push(`LOCATION:${data.location}`);
+  lines.push(`SUMMARY:${data.title.trim()}`);
+  
+  if (data.description?.trim()) {
+    lines.push(`DESCRIPTION:${data.description.trim()}`);
+  }
+  
+  lines.push(`LOCATION:${data.location.trim()}`);
 
-  const formatDateTime = (dateTimeStr: string) => {
-    if (!dateTimeStr) return "";
+  const formatDateTime = (dateTimeStr: string): string => {
     return dateTimeStr.replace(/[-:]/g, "").replace(" ", "T");
   };
 
-  if (data.start) lines.push(`DTSTART:${formatDateTime(data.start)}`);
-  if (data.end) lines.push(`DTEND:${formatDateTime(data.end)}`);
+  lines.push(`DTSTART:${formatDateTime(data.start)}`);
+  lines.push(`DTEND:${formatDateTime(data.end)}`);
 
   lines.push("END:VEVENT", "END:VCALENDAR");
 

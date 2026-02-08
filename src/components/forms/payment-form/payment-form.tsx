@@ -1,4 +1,6 @@
 import { useFormData, getInputValue } from "../../../domain/hooks/use-form-data";
+import { validatePaymentQr } from "../../../domain/validation/validators";
+import FormInput from "../shared/form-input";
 import type { PaymentQrData } from "../../../domain/types/qr";
 
 interface PaymentFormProps {
@@ -6,7 +8,7 @@ interface PaymentFormProps {
 }
 
 export default function PaymentForm({ onChange }: PaymentFormProps) {
-  const { data, update, errors } = useFormData<PaymentQrData>({
+  const { data, update, errors, setErrors } = useFormData<PaymentQrData>({
     initialData: {
       method: "",
       name: "",
@@ -18,6 +20,18 @@ export default function PaymentForm({ onChange }: PaymentFormProps) {
     onChange,
   });
 
+  const handleBlur = () => {
+    const validation = validatePaymentQr(data);
+    setErrors(validation.errors);
+  };
+
+  const handleUpdate = (field: keyof PaymentQrData, value: any) => {
+    const newData = { ...data, [field]: value };
+    update(field, value);
+    const validation = validatePaymentQr(newData);
+    setErrors(validation.errors);
+  };
+
   return (
     <>
       <div>
@@ -25,105 +39,68 @@ export default function PaymentForm({ onChange }: PaymentFormProps) {
           Método de pago <span class="text-red-500">*</span>
         </label>
         <select
-          class={`w-full px-3 py-2 border rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] ${
-            errors.method ? "border-red-500" : "border-gray-300"
-          }`}
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
           value={data.method}
-          onChange={(e) => update("method", getInputValue(e))}
+          onChange={(e) => handleUpdate("method", getInputValue(e))}
+          onBlur={handleBlur}
         >
           <option value="">Seleccionar método</option>
           <option value="bank">Banco</option>
           <option value="crypto">Cripto</option>
         </select>
         {errors.method && (
-          <p class="text-red-500 text-xs mt-1">{errors.method}</p>
+          <p class="text-red-500 text-xs font-bold mt-1">{errors.method}</p>
         )}
       </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">
-          Nombre del destinatario <span class="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          class={`w-full px-3 py-2 border rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] ${
-            errors.name ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder="Nombre del destinatario"
-          value={data.name}
-          onChange={(e) => update("name", getInputValue(e))}
-          required
-        />
-        {errors.name && (
-          <p class="text-red-500 text-xs mt-1">{errors.name}</p>
-        )}
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">
-          Cuenta o dirección <span class="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          class={`w-full px-3 py-2 border rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] ${
-            errors.account ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder="Cuenta o dirección"
-          value={data.account}
-          onChange={(e) => update("account", getInputValue(e))}
-          required
-        />
-        {errors.account && (
-          <p class="text-red-500 text-xs mt-1">{errors.account}</p>
-        )}
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">
-          Banco o plataforma <span class="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          class={`w-full px-3 py-2 border rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] ${
-            errors.bank ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder="Banco o plataforma"
-          value={data.bank}
-          onChange={(e) => update("bank", getInputValue(e))}
-          required
-        />
-        {errors.bank && (
-          <p class="text-red-500 text-xs mt-1">{errors.bank}</p>
-        )}
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">
-          Monto <span class="text-red-500">*</span>
-        </label>
-        <input
-          type="number"
-          class={`w-full px-3 py-2 border rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] ${
-            errors.amount ? "border-red-500" : "border-gray-300"
-          }`}
-          placeholder="Monto"
-          value={data.amount}
-          onChange={(e) => update("amount", Number(getInputValue(e)))}
-          required
-        />
-        {errors.amount && (
-          <p class="text-red-500 text-xs mt-1">{errors.amount}</p>
-        )}
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">
-          Referencia
-        </label>
-        <input
-          type="text"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
-          placeholder="Referencia"
-          value={data.reference}
-          onChange={(e) => update("reference", getInputValue(e))}
-          required
-        />
-      </div>
+      <FormInput
+        label="Nombre del destinatario"
+        type="text"
+        placeholder="Nombre del destinatario"
+        value={data.name}
+        onInput={(e) => handleUpdate("name", getInputValue(e))}
+        onBlur={handleBlur}
+        required
+        error={errors.name}
+      />
+      <FormInput
+        label="Cuenta o dirección"
+        type="text"
+        placeholder="Cuenta o dirección"
+        value={data.account}
+        onInput={(e) => handleUpdate("account", getInputValue(e))}
+        onBlur={handleBlur}
+        required
+        error={errors.account}
+      />
+      <FormInput
+        label="Banco o plataforma"
+        type="text"
+        placeholder="Banco o plataforma"
+        value={data.bank}
+        onInput={(e) => handleUpdate("bank", getInputValue(e))}
+        onBlur={handleBlur}
+        required
+        error={errors.bank}
+      />
+      <FormInput
+        label="Monto"
+        type="number"
+        placeholder="Monto"
+        value={data.amount}
+        onInput={(e) => handleUpdate("amount", Number(getInputValue(e)))}
+        onBlur={handleBlur}
+        required
+        error={errors.amount}
+        min={0.01}
+      />
+      
+      <FormInput
+        label="Referencia"
+        type="text"
+        placeholder="Referencia"
+        value={data.reference}
+        onInput={(e) => update("reference", getInputValue(e))}
+      />
     </>
   );
 }

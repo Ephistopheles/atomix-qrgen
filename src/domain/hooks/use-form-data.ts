@@ -23,15 +23,6 @@ export function useFormData<T extends Record<string, any>>({
   const update = <K extends keyof T>(key: K, value: T[K]) => {
     const nextData = { ...data, [key]: value } as T;
     setData(nextData);
-
-    if (errors[key as string]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[key as string];
-        return next;
-      });
-    }
-
     onChange?.(nextData);
   };
 
