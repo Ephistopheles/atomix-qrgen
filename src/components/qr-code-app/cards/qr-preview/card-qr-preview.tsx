@@ -32,8 +32,8 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
       if (qr.current && containerRef.current?.firstChild) {
         try {
           containerRef.current.removeChild(containerRef.current.firstChild);
-        } catch {
-          // Error esperado al desmontar
+        } catch (error) {
+            console.error("Error al limpiar el contenedor del QR:", error);
         }
       }
       qr.current = null;
