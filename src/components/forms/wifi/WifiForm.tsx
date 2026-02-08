@@ -1,17 +1,19 @@
-import { useState } from "preact/hooks";
+import { useFormData, getInputValue } from "../../../domain/hooks/useFormData";
+import type { WifiQrData } from "../../../domain/types/qr";
 
-export default function WifiForm({ onChange }) {
-  const [data, setData] = useState({
-    ssid: "",
-    password: "",
-    security: "WPA",
+interface WifiFormProps {
+  onChange?: (data: WifiQrData) => void;
+}
+
+export default function WifiForm({ onChange }: WifiFormProps) {
+  const { data, update } = useFormData<WifiQrData>({
+    initialData: {
+      ssid: "",
+      password: "",
+      security: "WPA",
+    },
+    onChange,
   });
-
-  const update = (k: string, v: string) => {
-    const next = { ...data, [k]: v };
-    setData(next);
-    onChange?.(next);
-  };
 
   return (
     <>
@@ -22,7 +24,7 @@ export default function WifiForm({ onChange }) {
           class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
           placeholder="Nombre de la red"
           value={data.ssid}
-          onInput={(e) => update("ssid", e.target.value)}
+          onInput={(e) => update("ssid", getInputValue(e))}
           required
         />
       </div>
@@ -36,7 +38,7 @@ export default function WifiForm({ onChange }) {
           class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
           placeholder="Contraseña"
           value={data.password}
-          onInput={(e) => update("password", e.target.value)}
+          onInput={(e) => update("password", getInputValue(e))}
           required
         />
       </div>
@@ -48,7 +50,7 @@ export default function WifiForm({ onChange }) {
         <select
           class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
           value={data.security}
-          onChange={(e) => update("security", e.target.value)}
+          onChange={(e) => update("security", getInputValue(e) as "WPA" | "WEP" | "nopass")}
         >
           <option value="WPA">WPA / WPA2</option>
           <option value="WEP">WEP</option>

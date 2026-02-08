@@ -1,10 +1,10 @@
-import { useEffect } from "preact/hooks";
-import { QrTypeKey } from "../../../../domain/types/qr";
+import { useEffect, useState } from "preact/hooks";
+import { QrTypeKey, type QrDataUnion } from "../../../../domain/types/qr";
 import { formRegistry } from "../../../../domain/form/formRegistry";
 
 interface CardContentInputProps {
   selectedType: QrTypeKey | null;
-  onChange?: (data: any) => void;
+  onChange?: (data: QrDataUnion | null) => void;
 }
 
 export default function CardContentInput({
@@ -12,23 +12,17 @@ export default function CardContentInput({
   onChange,
 }: CardContentInputProps) {
   const Form = selectedType ? formRegistry[selectedType] : null;
+  const [key, setKey] = useState(0);
 
-  if (!selectedType) {
-    return (
-      <section class="space-y-6">
-        <article class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">Contenido</h2>
-          <div class="text-gray-500 text-sm">
-            Selecciona un tipo de QR para comenzar.
-          </div>
-        </article>
-      </section>
-    );
-  }
-
+  // Limpiar datos cuando cambia el tipo y remountar el formulario
   useEffect(() => {
-    onChange?.(null);
-  }, [selectedType]);
+    if (selectedType) {
+      // Incrementar key fuerza el remounting del formulario
+      setKey((prev) => prev + 1);
+      // Limpiar datos después de unmount del formulario anterior
+      onChange?.(null);
+    }
+  }, [selectedType, onChange]);
 
   return (
     <section class="space-y-6">
@@ -40,8 +34,10 @@ export default function CardContentInput({
             <div class="text-gray-500 text-sm">Selecciona un tipo de QR</div>
           )}
 
-          {Form && <Form onChange={onChange} />}
+          {Form && <Form key={key} onChange={onChange} />}
         </div>
+
+        {/* TODO: Custom QRS */}
       </article>
     </section>
   );
