@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import QRCodeStyling from "qr-code-styling";
+import printer from "../../../../assets/icons/printer.svg";
+import download from "../../../../assets/icons/download.svg";
 import { encodeQrData } from "../../../../domain/encoders/encoders";
 import type { QrTypeKey, QrDataUnion } from "../../../../domain/types/qr";
 
@@ -200,7 +202,16 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
                   : "bg-blue-600 text-white hover:bg-blue-700"
               }`}
             >
-              <span>⬇️</span>
+              <img
+                src={download.src}
+                alt="Descargar"
+                class="w-5 h-5"
+                style={{
+                  filter: isDisabled
+                    ? "brightness(0.6)"
+                    : "brightness(0) saturate(100%) invert(1)",
+                }}
+              />
               Descargar QR ({format.toUpperCase()})
             </button>
             <button
@@ -212,7 +223,16 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
                   : "bg-blue-100 text-blue-600 hover:bg-blue-200"
               }`}
             >
-              <span>🖨️</span>
+              <img
+                src={printer.src}
+                alt="Imprimir"
+                class="w-5 h-5"
+                style={{
+                  filter: isDisabled
+                    ? "brightness(0.6)"
+                    : "brightness(0) saturate(100%)",
+                }}
+              />
               Imprimir
             </button>
           </div>
