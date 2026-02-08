@@ -3,6 +3,7 @@ import QRCodeStyling from "qr-code-styling";
 import printer from "../../../../assets/icons/printer.svg";
 import download from "../../../../assets/icons/download.svg";
 import { encodeQrData } from "../../../../domain/encoders/encoders";
+import { showToast } from "../../../../domain/ui/toast";
 import type { QrTypeKey, QrDataUnion } from "../../../../domain/types/qr";
 
 interface CardQrPreviewProps {
@@ -78,9 +79,16 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
         name: "qr-code",
         extension: format,
       } as any);
+      showToast({
+        message: `QR descargado como ${format.toUpperCase()}`,
+        type: "success",
+      });
     } catch (error) {
       console.error("Error al descargar QR:", error);
-      alert("Error al descargar QR. Intenta de nuevo.");
+      showToast({
+        message: "Error al descargar QR. Intenta de nuevo.",
+        type: "error",
+      });
     }
   };
 
@@ -88,20 +96,29 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
     if (!qr.current || isDisabled) return;
 
     try {
-      const dataUrl = await qr.current.getRawData("png");
+      // Obtener el canvas del contenedor
+      const canvas = containerRef.current?.querySelector(
+        "canvas",
+      ) as HTMLCanvasElement;
 
-      if (!dataUrl) {
-        console.error("No se pudo obtener la imagen del QR");
-        alert("Error: No se pudo generar la imagen del QR");
+      if (!canvas) {
+        showToast({
+          message: "Error: No se pudo generar la imagen del QR",
+          type: "error",
+        });
         return;
       }
 
       const printWindow = window.open("", "_blank");
       if (!printWindow) {
-        console.error("No se pudo abrir la ventana de impresión");
-        alert("Por favor, permite las ventanas emergentes para imprimir");
+        showToast({
+          message: "Por favor, permite las ventanas emergentes para imprimir",
+          type: "warning",
+        });
         return;
       }
+
+      const dataUrl = canvas.toDataURL("image/png");
 
       const html = `
         <!DOCTYPE html>
@@ -148,9 +165,17 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
       printWindow.document.open();
       printWindow.document.write(html);
       printWindow.document.close();
+
+      showToast({
+        message: "QR abierto para imprimir",
+        type: "info",
+      });
     } catch (error) {
       console.error("Error al imprimir QR:", error);
-      alert("Error al imprimir QR. Intenta de nuevo.");
+      showToast({
+        message: "Error al imprimir QR. Intenta de nuevo.",
+        type: "error",
+      });
     }
   };
 
@@ -248,8 +273,8 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Formato</span>
-                <span class="font-medium text-gray-900 uppercase">
-                  {format}
+                <span class="font-medium text-gray-900">
+                  {format.toUpperCase()}
                 </span>
               </div>
             </div>

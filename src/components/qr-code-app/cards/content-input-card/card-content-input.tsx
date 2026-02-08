@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks";
 import { QrTypeKey, type QrDataUnion } from "../../../../domain/types/qr";
-import { formRegistry } from "../../../../domain/form/formRegistry";
+import { formRegistry } from "../../../../domain/form/form-registry";
 
 interface CardContentInputProps {
   selectedType: QrTypeKey | null;

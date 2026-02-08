@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks";
-import CardQrType from "../Cards/QrTypes/CardQrType";
-import CardContentInput from "../Cards/ContentInputCard/CardContentInput";
-import CardQrPreview from "../Cards/QrPreview/CardQrPreview";
+import CardQrType from "../cards/qr-types/card-qr-type";
+import CardContentInput from "../cards/content-input-card/card-content-input";
+import CardQrPreview from "../cards/qr-preview/card-qr-preview";
 import { QrTypeKey, type QrDataUnion } from "../../../domain/types/qr";
 
 export default function QrGenApp() {

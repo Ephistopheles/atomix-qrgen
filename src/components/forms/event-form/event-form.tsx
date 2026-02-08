@@ -1,4 +1,4 @@
-import { useFormData, getInputValue } from "../../../domain/hooks/useFormData";
+import { useFormData, getInputValue } from "../../../domain/hooks/use-form-data";
 import type { EventQrData } from "../../../domain/types/qr";
 
 interface EventFormProps {
