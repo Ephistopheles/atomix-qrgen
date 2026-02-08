@@ -89,7 +89,13 @@ const encodeEvent = (data: EventQrData) => {
 
 export const encodeQrData = (
   type: QrTypeKey,
-  data: TextQrData | UrlQrData | WifiQrData | VCardQrData | PaymentQrData | EventQrData
+  data:
+    | TextQrData
+    | UrlQrData
+    | WifiQrData
+    | VCardQrData
+    | PaymentQrData
+    | EventQrData,
 ) => {
   switch (type) {
     case QrTypeKey.PlainText:

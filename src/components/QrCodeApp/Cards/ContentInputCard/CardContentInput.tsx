@@ -14,21 +14,17 @@ export default function CardContentInput({
   const Form = selectedType ? formRegistry[selectedType] : null;
   const [key, setKey] = useState(0);
 
-  // Limpiar datos cuando cambia el tipo y remountar el formulario
   useEffect(() => {
     if (selectedType) {
-      // Incrementar key fuerza el remounting del formulario
       setKey((prev) => prev + 1);
-      // Limpiar datos después de unmount del formulario anterior
       onChange?.(null);
     }
-  }, [selectedType, onChange]);
+  }, [selectedType]);
 
   return (
     <section class="space-y-6">
       <article class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Contenido</h2>
-
         <div class="space-y-4">
           {!Form && (
             <div class="text-gray-500 text-sm">Selecciona un tipo de QR</div>
@@ -36,8 +32,6 @@ export default function CardContentInput({
 
           {Form && <Form key={key} onChange={onChange} />}
         </div>
-
-        {/* TODO: Custom QRS */}
       </article>
     </section>
   );

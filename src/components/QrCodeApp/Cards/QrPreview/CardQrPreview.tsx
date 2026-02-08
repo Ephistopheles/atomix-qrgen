@@ -14,17 +14,9 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const qr = useRef<QRCodeStyling | null>(null);
   const [format, setFormat] = useState<ExportFormat>("png");
+  const isDisabled = !type || !data;
 
-  // Reinicializar QR cuando cambia el tipo
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Limpiar QR anterior si existe
-    if (qr.current) {
-      containerRef.current.innerHTML = "";
-    }
-
-    // Crear nuevo QR
     qr.current = new QRCodeStyling({
       width: 280,
       height: 280,
@@ -33,44 +25,87 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
       backgroundOptions: { color: "#ffffff" },
     });
 
-    qr.current.append(containerRef.current);
-  }, [type]); // Re-crear cuando cambia el tipo
+    return () => {
+      if (qr.current && containerRef.current?.firstChild) {
+        try {
+          containerRef.current.removeChild(containerRef.current.firstChild);
+        } catch {
+          // Error esperado al desmontar
+        }
+      }
+      qr.current = null;
+    };
+  }, []);
 
-  // Actualizar datos del QR
   useEffect(() => {
-    if (!qr.current || !type || !data) return;
+    if (!containerRef.current || !qr.current || isDisabled) return;
 
-    const encoded = encodeQrData(type, data);
-    qr.current.update({ data: encoded });
-  }, [type, data]);
-
-  const handleDownload = async () => {
-    if (!qr.current) return;
+    if (containerRef.current.firstChild) return;
 
     try {
-      if (format === "png") {
-        await qr.current.download({ name: "qr-code", extension: "png" });
-      } else if (format === "svg") {
-        await qr.current.download({ name: "qr-code", extension: "svg" });
+      qr.current.append(containerRef.current);
+    } catch (error) {
+      console.error("Error al agregar QR al contenedor:", error);
+    }
+  }, [isDisabled]);
+
+  useEffect(() => {
+    if (!qr.current || isDisabled) {
+      if (qr.current) {
+        qr.current.update({ data: "" });
       }
+      return;
+    }
+
+    try {
+      const encoded = encodeQrData(type, data);
+      qr.current.update({ data: encoded });
+    } catch (error) {
+      console.error("Error al actualizar QR:", error);
+      if (qr.current) {
+        qr.current.update({ data: "" });
+      }
+    }
+  }, [type, data, isDisabled]);
+
+  const handleDownload = async () => {
+    if (!qr.current || isDisabled) return;
+
+    try {
+      await qr.current.download({
+        name: "qr-code",
+        extension: format,
+      } as any);
     } catch (error) {
       console.error("Error al descargar QR:", error);
+      alert("Error al descargar QR. Intenta de nuevo.");
     }
   };
 
   const handlePrint = async () => {
-    if (!qr.current) return;
+    if (!qr.current || isDisabled) return;
 
     try {
       const dataUrl = await qr.current.getRawData("png");
 
+      if (!dataUrl) {
+        console.error("No se pudo obtener la imagen del QR");
+        alert("Error: No se pudo generar la imagen del QR");
+        return;
+      }
+
       const printWindow = window.open("", "_blank");
-      if (!printWindow) return;
+      if (!printWindow) {
+        console.error("No se pudo abrir la ventana de impresión");
+        alert("Por favor, permite las ventanas emergentes para imprimir");
+        return;
+      }
 
       const html = `
         <!DOCTYPE html>
         <html>
           <head>
+            <meta charset="UTF-8">
             <title>Imprimir QR</title>
             <style>
               body { 
@@ -81,24 +116,28 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
                 align-items: center; 
                 min-height: 100vh; 
                 font-family: system-ui, -apple-system, sans-serif; 
+                background: white;
               }
               #qr-container { 
                 text-align: center; 
               }
               img { 
-                max-width: 100%; 
+                max-width: 600px; 
+                width: 100%; 
                 height: auto; 
+                display: block;
               }
               @media print {
                 body { 
                   padding: 0; 
+                  margin: 0;
                 }
               }
             </style>
           </head>
           <body>
             <div id="qr-container">
-              <img src="${dataUrl}" alt="QR Code" />
+              <img src="${dataUrl}" alt="QR Code" onload="setTimeout(function() { window.print(); }, 500);" />
             </div>
           </body>
         </html>
@@ -107,16 +146,11 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
       printWindow.document.open();
       printWindow.document.write(html);
       printWindow.document.close();
-
-      printWindow.onload = () => {
-        printWindow.print();
-      };
     } catch (error) {
       console.error("Error al imprimir QR:", error);
+      alert("Error al imprimir QR. Intenta de nuevo.");
     }
   };
-
-  const isDisabled = !type || !data;
 
   return (
     <section class="space-y-6">
@@ -149,7 +183,10 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
               </div>
             ) : (
               <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg border border-gray-200 p-4">
-                <div ref={containerRef} class="bg-white rounded border border-gray-300" />
+                <div
+                  ref={containerRef}
+                  class="bg-white rounded border border-gray-300"
+                />
               </div>
             )}
           </div>

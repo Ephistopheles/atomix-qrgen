@@ -8,8 +8,6 @@ export default function QrGenApp() {
   const [type, setType] = useState<QrTypeKey | null>(null);
   const [data, setData] = useState<QrDataUnion | null>(null);
 
-  console.log(data);
-
   return (
     <>
       <CardQrType selected={type} onSelect={setType} />

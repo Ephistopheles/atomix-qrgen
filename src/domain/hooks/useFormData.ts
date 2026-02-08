@@ -27,6 +27,11 @@ export function useFormData<T extends Record<string, any>>({
 }
 
 export function getInputValue(e: Event): string {
-  const target = (e.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null) ?? null;
+  const target =
+    (e.target as
+      | HTMLInputElement
+      | HTMLSelectElement
+      | HTMLTextAreaElement
+      | null) ?? null;
   return target?.value ?? "";
 }
