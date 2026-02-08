@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "preact/hooks";
 import QRCodeStyling from "qr-code-styling";
-import printer from "../../../../assets/icons/printer.svg";
-import download from "../../../../assets/icons/download.svg";
+import printer from "../../../../assets/icons/qr-preview/printer.svg";
+import download from "../../../../assets/icons/qr-preview/download.svg";
 import { encodeQrData } from "../../../../domain/encoders/encoders";
 import { showToast } from "../../../../domain/ui/toast";
 import type { QrTypeKey, QrDataUnion } from "../../../../domain/types/qr";
@@ -96,7 +96,6 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
     if (!qr.current || isDisabled) return;
 
     try {
-      // Obtener el canvas del contenedor
       const canvas = containerRef.current?.querySelector(
         "canvas",
       ) as HTMLCanvasElement;

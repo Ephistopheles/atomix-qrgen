@@ -1,3 +1,8 @@
+import checkCircle from "../../assets/icons/toast/check-circle.svg";
+import xCircle from "../../assets/icons/toast/x-circle.svg";
+import alertCircle from "../../assets/icons/toast/alert-circle.svg";
+import infoCircle from "../../assets/icons/toast/info-circle.svg";
+
 type ToastType = "success" | "error" | "info" | "warning";
 
 interface ToastConfig {
@@ -29,28 +34,28 @@ function initializeToastElement() {
 function getToastStyles(type: ToastType): {
   bgColor: string;
   textColor: string;
-  emoji: string;
+  iconSrc: { src: string };
 } {
   const styles = {
     success: {
       bgColor: "#10b981",
       textColor: "#ffffff",
-      emoji: "✅",
+      iconSrc: checkCircle,
     },
     error: {
       bgColor: "#ef4444",
       textColor: "#ffffff",
-      emoji: "❌",
+      iconSrc: xCircle,
     },
     warning: {
       bgColor: "#f59e0b",
       textColor: "#ffffff",
-      emoji: "⚠️",
+      iconSrc: alertCircle,
     },
     info: {
       bgColor: "#3b82f6",
       textColor: "#ffffff",
-      emoji: "ℹ️",
+      iconSrc: infoCircle,
     },
   };
 
@@ -66,7 +71,7 @@ export function showToast({
 
   if (!toastElement) return;
 
-  const { bgColor, textColor, emoji } = getToastStyles(type);
+  const { bgColor, textColor, iconSrc } = getToastStyles(type);
 
   const toastDiv = document.createElement("div");
   toastDiv.style.cssText = `
@@ -85,7 +90,7 @@ export function showToast({
     pointer-events: auto;
   `;
 
-  toastDiv.innerHTML = `<span>${emoji}</span><span>${message}</span>`;
+  toastDiv.innerHTML = `<img src="${iconSrc.src}" alt="icon" style="width: 1.25rem; height: 1.25rem; filter: brightness(0) saturate(100%) invert(1);" /><span>${message}</span>`;
 
   if (!document.querySelector("style[data-toast-animation]")) {
     const style = document.createElement("style");

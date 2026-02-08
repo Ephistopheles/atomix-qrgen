@@ -1,9 +1,9 @@
-import TextIcon from "../../../../assets/icons/text.svg";
-import LinkIcon from "../../../../assets/icons/link.svg";
-import WifiIcon from "../../../../assets/icons/wifi.svg";
-import ContactIcon from "../../../../assets/icons/contact.svg";
-import BankIcon from "../../../../assets/icons/bank.svg";
-import CalendarIcon from "../../../../assets/icons/calendar.svg";
+import TextIcon from "../../../../assets/icons/qr-types/text.svg";
+import LinkIcon from "../../../../assets/icons/qr-types/link.svg";
+import WifiIcon from "../../../../assets/icons/qr-types/wifi.svg";
+import ContactIcon from "../../../../assets/icons/qr-types/contact.svg";
+import BankIcon from "../../../../assets/icons/qr-types/bank.svg";
+import CalendarIcon from "../../../../assets/icons/qr-types/calendar.svg";
 import { QrTypeKey } from "../../../../domain/types/qr";
 
 interface QrType {
