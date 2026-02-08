@@ -6,7 +6,7 @@ interface VCardFormProps {
 }
 
 export default function VCardForm({ onChange }: VCardFormProps) {
-  const { data, update } = useFormData<VCardQrData>({
+  const { data, update, errors } = useFormData<VCardQrData>({
     initialData: {
       firstName: "",
       lastName: "",
@@ -26,29 +26,39 @@ export default function VCardForm({ onChange }: VCardFormProps) {
     <>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">
-          Nombre
+          Nombre <span class="text-red-500">*</span>
         </label>
         <input
           type="text"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
+          class={`w-full px-3 py-2 border rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] ${
+            errors.firstName ? "border-red-500" : "border-gray-300"
+          }`}
           placeholder="Nombre"
           value={data.firstName}
           onInput={(e) => update("firstName", getInputValue(e))}
           required
         />
+        {errors.firstName && (
+          <p class="text-red-500 text-xs mt-1">{errors.firstName}</p>
+        )}
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">
-          Apellido
+          Apellido <span class="text-red-500">*</span>
         </label>
         <input
           type="text"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
+          class={`w-full px-3 py-2 border rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] ${
+            errors.lastName ? "border-red-500" : "border-gray-300"
+          }`}
           placeholder="Apellido"
           value={data.lastName}
           onInput={(e) => update("lastName", getInputValue(e))}
           required
         />
+        {errors.lastName && (
+          <p class="text-red-500 text-xs mt-1">{errors.lastName}</p>
+        )}
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">

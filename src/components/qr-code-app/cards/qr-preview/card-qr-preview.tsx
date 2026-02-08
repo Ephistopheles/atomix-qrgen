@@ -4,6 +4,7 @@ import printer from "../../../../assets/icons/qr-preview/printer.svg";
 import download from "../../../../assets/icons/qr-preview/download.svg";
 import { encodeQrData } from "../../../../domain/encoders/encoders";
 import { showToast } from "../../../../domain/ui/toast";
+import { validateQrData } from "../../../../domain/validation/validators";
 import type { QrTypeKey, QrDataUnion } from "../../../../domain/types/qr";
 
 interface CardQrPreviewProps {
@@ -17,7 +18,9 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const qr = useRef<QRCodeStyling | null>(null);
   const [format, setFormat] = useState<ExportFormat>("png");
-  const isDisabled = !type || !data;
+
+  const validation = type && data ? validateQrData(type, data) : { isValid: false, errors: {} };
+  const isDisabled = !type || !data || !validation.isValid;
 
   useEffect(() => {
     qr.current = new QRCodeStyling({
@@ -72,7 +75,15 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
   }, [type, data, isDisabled]);
 
   const handleDownload = async () => {
-    if (!qr.current || isDisabled) return;
+    if (!qr.current || isDisabled) {
+      if (!validation.isValid) {
+        showToast({
+          message: "Por favor, completa todos los campos obligatorios antes de descargar",
+          type: "warning",
+        });
+      }
+      return;
+    }
 
     try {
       await qr.current.download({
@@ -93,7 +104,15 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
   };
 
   const handlePrint = async () => {
-    if (!qr.current || isDisabled) return;
+    if (!qr.current || isDisabled) {
+      if (!validation.isValid) {
+        showToast({
+          message: "Por favor, completa todos los campos obligatorios antes de imprimir",
+          type: "warning",
+        });
+      }
+      return;
+    }
 
     try {
       const canvas = containerRef.current?.querySelector(
@@ -201,14 +220,17 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
           </div>
           <div class="flex justify-center">
             {isDisabled ? (
-              <div class="w-72 h-72 bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+              <div class="w-72 h-72 bg-linear-to-br from-gray-100 to-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
                 <p class="text-gray-500 text-sm text-center px-4">
-                  Selecciona un tipo de QR e ingresa los datos para ver la vista
-                  previa
+                  {!type 
+                    ? "Selecciona un tipo de QR para comenzar"
+                    : !data
+                    ? "Ingresa los datos para ver la vista previa"
+                    : "Completa todos los campos obligatorios (*)"}
                 </p>
               </div>
             ) : (
-              <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg border border-gray-200 p-4">
+              <div class="bg-linear-to-br from-gray-50 to-white rounded-lg border border-gray-200 p-4">
                 <div
                   ref={containerRef}
                   class="bg-white rounded border border-gray-300"
