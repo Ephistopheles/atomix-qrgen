@@ -1,13 +1,33 @@
 {
   "name": "atomix-qrgen",
-  "type": "module",
   "version": "0.0.1",
+  "description": "A modern, privacy-focused QR code generator supporting multiple formats including URL, WiFi, vCard, Event, Payment, and plain text. Built with Astro and Preact.",
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
+  "keywords": [
+    "qr-code",
+    "qr-code-generator",
+    "qr-generator",
+    "wifi-qr",
+    "vcard-qr",
+    "event-qr",
+    "payment-qr",
+    "astro",
+    "preact",
+    "tailwindcss",
+    "client-side",
+    "privacy",
+    "no-backend",
+    "secure",
+    "atomix"
+  ],
+  "author": "Johan Amed <rjohanamed@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "@astrojs/preact": "^4.1.3",
     "astro": "^5.17.1",
