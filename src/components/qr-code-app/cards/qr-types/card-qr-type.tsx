@@ -43,8 +43,7 @@ export default function CardQrType({ selected, onSelect }: CardQrTypeProps) {
             } else if (isSelected) {
               styles = "bg-blue-600 text-white hover:bg-blue-700";
             } else {
-              styles =
-                "bg-blue-50 text-gray-500 hover:bg-blue-100 hover:text-gray-800";
+              styles = "text-gray-500 hover:bg-blue-100 hover:text-gray-800";
             }
 
             return (
