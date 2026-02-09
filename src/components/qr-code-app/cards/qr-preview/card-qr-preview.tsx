@@ -202,15 +202,15 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
       <article class="bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Vista previa</h2>
         <div class="space-y-6">
-          <div class="flex gap-px bg-gray-200 p-px rounded-lg overflow-hidden">
+          <div class="flex gap-3">
             {["png", "svg"].map((fmt) => (
               <button
                 key={fmt}
                 onClick={() => setFormat(fmt as ExportFormat)}
-                class={`flex-1 py-2 text-xs font-semibold rounded transition uppercase ${
+                class={`flex-1 py-2 text-xs font-semibold rounded-lg transition uppercase ${
                   format === fmt
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
                 }`}
                 aria-pressed={format === fmt}
               >

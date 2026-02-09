@@ -83,7 +83,7 @@ export const validateWifiQr = (data: WifiQrData): ValidationResult => {
     } else if (data.security === "WEP" && data.password.length < 5) {
       errors.password = "La contraseña WEP debe tener al menos 5 caracteres";
     } else if (data.security === "WPA" && data.password.length < 8) {
-      errors.password = "La contraseña WPA debe tener al menos 8 caracteres";
+      errors.password = "La contraseña WPA/WPA2 debe tener al menos 8 caracteres";
     } else if (data.password.length > 63) {
       errors.password = "La contraseña no puede tener más de 63 caracteres";
     }

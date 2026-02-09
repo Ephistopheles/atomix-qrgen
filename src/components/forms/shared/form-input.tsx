@@ -39,6 +39,7 @@ export default function FormInput({
         type={isTextarea ? undefined : type}
         rows={rows}
         class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
+        style={isTextarea ? "resize: none;" : undefined}
         placeholder={placeholder}
         value={value}
         onInput={onInput}

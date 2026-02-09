@@ -28,16 +28,23 @@ export default function PaymentForm({ onChange }: PaymentFormProps) {
         <label class="block text-sm font-medium text-gray-700 mb-2">
           Método de pago <span class="text-red-500">*</span>
         </label>
-        <select
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1]"
-          value={data.method}
-          onChange={(e) => handleUpdate("method", getInputValue(e))}
-          onBlur={handleBlur}
-        >
-          <option value="">Seleccionar método</option>
-          <option value="bank">Banco</option>
-          <option value="crypto">Cripto</option>
-        </select>
+        <div class="relative">
+          <select
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 hover:border-[#0352D1] focus:outline-none focus:ring-2 focus:ring-[#0352D1] appearance-none bg-white cursor-pointer pr-10"
+            value={data.method}
+            onChange={(e) => handleUpdate("method", getInputValue(e))}
+            onBlur={handleBlur}
+          >
+            <option value="">Seleccionar método</option>
+            <option value="bank">Banco</option>
+            <option value="crypto">Cripto</option>
+          </select>
+          <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
         {errors.method && (
           <p class="text-red-500 text-xs font-bold mt-1">{errors.method}</p>
         )}

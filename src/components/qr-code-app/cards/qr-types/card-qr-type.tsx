@@ -10,6 +10,7 @@ interface QrType {
   icon: { src: string };
   label: string;
   key: QrTypeKey;
+  disabled?: boolean;
 }
 
 interface CardQrTypeProps {
@@ -23,8 +24,8 @@ export default function CardQrType({ selected, onSelect }: CardQrTypeProps) {
     { icon: LinkIcon, label: "URL / Link", key: QrTypeKey.Url },
     { icon: WifiIcon, label: "Wi-Fi", key: QrTypeKey.Wifi },
     { icon: ContactIcon, label: "vCard / Contacto", key: QrTypeKey.VCard },
-    { icon: BankIcon, label: "Pago / Banco", key: QrTypeKey.Payment },
-    { icon: CalendarIcon, label: "Evento / Calendar", key: QrTypeKey.Event },
+    { icon: BankIcon, label: "Pago / Banco", key: QrTypeKey.Payment, disabled: true },
+    { icon: CalendarIcon, label: "Evento / Calendar", key: QrTypeKey.Event, disabled: true },
   ];
 
   return (
@@ -36,43 +37,56 @@ export default function CardQrType({ selected, onSelect }: CardQrTypeProps) {
           {qrTypes.map((type) => {
             const isSelected = selected === type.key;
             const hasSelection = selected !== null;
+            const isDisabled = type.disabled;
 
             let styles = "";
-            if (!hasSelection) {
-              styles = "text-gray-700 hover:bg-blue-100";
+            if (isDisabled) {
+              styles = "text-gray-400 bg-gray-50 cursor-not-allowed";
+            } else if (!hasSelection) {
+              styles = "text-gray-700 hover:bg-blue-100 cursor-pointer";
             } else if (isSelected) {
-              styles = "bg-blue-600 text-white hover:bg-blue-700";
+              styles = "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer";
             } else {
-              styles = "text-gray-500 hover:bg-blue-100 hover:text-gray-800";
+              styles = "text-gray-500 hover:bg-blue-100 hover:text-gray-800 cursor-pointer";
             }
 
             return (
               <li key={type.key}>
                 <button
                   class={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition ${styles}`}
-                  onClick={() => onSelect(type.key)}
+                  onClick={() => !isDisabled && onSelect(type.key)}
+                  disabled={isDisabled}
                 >
                   <img
                     src={type.icon.src}
                     alt={type.label}
                     class={`w-5 h-5 ${
-                      isSelected
-                        ? "opacity-100"
-                        : hasSelection
-                          ? "opacity-50"
-                          : "opacity-80"
+                      isDisabled
+                        ? "opacity-30"
+                        : isSelected
+                          ? "opacity-100"
+                          : hasSelection
+                            ? "opacity-50"
+                            : "opacity-80"
                     }`}
                     style={{
                       filter: `brightness(0) saturate(100%) ${
-                        isSelected
-                          ? "invert(1)"
-                          : hasSelection
-                            ? "brightness(0.6)"
-                            : "brightness(0.8)"
+                        isDisabled
+                          ? "brightness(0.9)"
+                          : isSelected
+                            ? "invert(1)"
+                            : hasSelection
+                              ? "brightness(0.6)"
+                              : "brightness(0.8)"
                       }`,
                     }}
                   />
-                  <span class="text-sm font-medium">{type.label}</span>
+                  <span class="text-sm font-medium flex-1 text-left">{type.label}</span>
+                  {isDisabled && (
+                    <span class="text-xs px-2 py-0.5 bg-gray-200 text-gray-500 rounded-full font-semibold">
+                      Soon
+                    </span>
+                  )}
                 </button>
               </li>
             );
