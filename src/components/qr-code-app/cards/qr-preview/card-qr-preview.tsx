@@ -5,7 +5,7 @@ import download from "../../../../assets/icons/qr-preview/download.svg";
 import { encodeQrData } from "../../../../domain/encoders/encoders";
 import { showToast } from "../../../../domain/ui/toast";
 import { validateQrData } from "../../../../domain/validation/validators";
-import type { QrTypeKey, QrDataUnion } from "../../../../domain/types/qr";
+import { QrTypeKey, type QrDataUnion } from "../../../../domain/types/qr";
 
 interface CardQrPreviewProps {
   type: QrTypeKey | null;
@@ -19,7 +19,8 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
   const qr = useRef<QRCodeStyling | null>(null);
   const [format, setFormat] = useState<ExportFormat>("png");
 
-  const validation = type && data ? validateQrData(type, data) : { isValid: false, errors: {} };
+  const validation =
+    type && data ? validateQrData(type, data) : { isValid: false, errors: {} };
   const isDisabled = !type || !data || !validation.isValid;
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
         try {
           containerRef.current.removeChild(containerRef.current.firstChild);
         } catch (error) {
-            console.error("Error al limpiar el contenedor del QR:", error);
+          console.error("Error al limpiar el contenedor del QR:", error);
         }
       }
       qr.current = null;
@@ -78,7 +79,8 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
     if (!qr.current || isDisabled) {
       if (!validation.isValid) {
         showToast({
-          message: "Por favor, completa todos los campos obligatorios antes de descargar",
+          message:
+            "Por favor, completa todos los campos obligatorios antes de descargar",
           type: "warning",
         });
       }
@@ -86,8 +88,15 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
     }
 
     try {
+      const typeKey = type
+        ? Object.keys(QrTypeKey).find(
+            (key) => QrTypeKey[key as keyof typeof QrTypeKey] === type,
+          )
+        : "Unknown";
+      const fileName = `Qr_${typeKey}_${new Date().toISOString().replace(/[-:]/g, "").replace("T", "_").split(".")[0]}`;
+
       await qr.current.download({
-        name: "qr-code",
+        name: fileName,
         extension: format,
       } as any);
       showToast({
@@ -107,7 +116,8 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
     if (!qr.current || isDisabled) {
       if (!validation.isValid) {
         showToast({
-          message: "Por favor, completa todos los campos obligatorios antes de imprimir",
+          message:
+            "Por favor, completa todos los campos obligatorios antes de imprimir",
           type: "warning",
         });
       }
@@ -138,12 +148,19 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
 
       const dataUrl = canvas.toDataURL("image/png");
 
+      const typeKey = type
+        ? Object.keys(QrTypeKey).find(
+            (key) => QrTypeKey[key as keyof typeof QrTypeKey] === type,
+          )
+        : "Unknown";
+      const fileName = `Qr_${typeKey}_${new Date().toISOString().replace(/[-:]/g, "").replace("T", "_").split(".")[0]}`;
+
       const html = `
         <!DOCTYPE html>
         <html>
           <head>
             <meta charset="UTF-8">
-            <title>Imprimir QR</title>
+            <title>${fileName}</title>
             <style>
               body { 
                 margin: 0; 
@@ -171,10 +188,31 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
                 }
               }
             </style>
+            <script>
+              function autoPrint() {
+                window.print();
+
+                window.onafterprint = function() { 
+                  window.close(); 
+                };
+
+                setTimeout(function() {
+                  window.close();
+                }, 1000);
+              }
+
+              window.matchMedia("print").addListener(function(mql) {
+                if (!mql.matches) {
+                  setTimeout(function() {
+                    window.close();
+                  }, 100);
+                }
+              });
+            </script>
           </head>
-          <body>
+          <body onload="autoPrint()">
             <div id="qr-container">
-              <img src="${dataUrl}" alt="QR Code" onload="setTimeout(function() { window.print(); }, 500);" />
+              <img src="${dataUrl}" alt="QR Code" />
             </div>
           </body>
         </html>
@@ -199,7 +237,7 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
 
   return (
     <section class="space-y-6">
-      <article class="bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
+      <article class="bg-white rounded-xl border border-gray-200 p-8 shadow-[20px_5px_30px_rgba(0,0,0,0.4)]">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Vista previa</h2>
         <div class="space-y-6">
           <div class="flex gap-3">
@@ -222,11 +260,11 @@ export default function CardQrPreview({ type, data }: CardQrPreviewProps) {
             {isDisabled ? (
               <div class="w-72 h-72 bg-linear-to-br from-gray-100 to-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
                 <p class="text-gray-500 text-sm text-center px-4">
-                  {!type 
+                  {!type
                     ? "Selecciona un tipo de QR para comenzar"
                     : !data
-                    ? "Ingresa los datos para ver la vista previa"
-                    : "Completa todos los campos obligatorios (*)"}
+                      ? "Ingresa los datos para ver la vista previa"
+                      : "Completa todos los campos obligatorios (*)"}
                 </p>
               </div>
             ) : (

@@ -30,7 +30,7 @@ export default function CardQrType({ selected, onSelect }: CardQrTypeProps) {
 
   return (
     <section class="space-y-6">
-      <article class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition h-fit">
+      <article class="bg-white rounded-xl border border-gray-200 p-6 shadow-[20px_5px_30px_rgba(0,0,0,0.4)] transition h-fit">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Tipos de QR</h2>
 
         <ul class="space-y-2">

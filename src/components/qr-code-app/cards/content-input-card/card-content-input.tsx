@@ -23,7 +23,7 @@ export default function CardContentInput({
 
   return (
     <section class="space-y-6">
-      <article class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition">
+      <article class="bg-white rounded-xl border border-gray-200 p-6 shadow-[20px_5px_30px_rgba(0,0,0,0.4)] transition">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">Contenido</h2>
         <div class="space-y-4">
           {!Form && (
